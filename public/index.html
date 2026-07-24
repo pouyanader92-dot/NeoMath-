@@ -153,6 +153,10 @@
                     <i data-lucide="coins" class="w-3.5 h-3.5 text-yellow-400"></i>
                     <span id="nav-coins" class="text-xs sm:text-sm font-medium text-yellow-400">0</span>
                 </div>
+                <div class="flex items-center gap-1.5 glass-light rounded-lg px-2.5 py-1.5">
+                    <i data-lucide="flame" class="w-3.5 h-3.5 text-orange-500"></i>
+                    <span id="nav-streak" class="text-xs sm:text-sm font-medium text-orange-500">0</span>
+                </div>
                 <div class="flex items-center gap-1.5" id="nav-sub-container" style="display:none;">
                     <span id="nav-sub-badge" class="sub-badge"></span>
                     <span id="nav-level-badge" class="level-badge lv1">1</span>
@@ -720,7 +724,7 @@
                     </div>
                     <div class="flex items-center justify-between glass-light rounded-xl p-3">
                         <span class="text-sm text-neutral-300 flex items-center gap-2"><i data-lucide="volume-2" class="w-4 h-4 text-indigo-400"></i> صدا در مسابقات</span>
-                        <div class="toggle-switch" onclick="this.classList.toggle('active')"><div class="toggle-dot"></div></div>
+                        <div class="toggle-switch active" id="sound-toggle" onclick="toggleSound()"><div class="toggle-dot"></div></div>
                     </div>
                     <div class="flex items-center justify-between glass-light rounded-xl p-3">
                         <span class="text-sm text-neutral-300 flex items-center gap-2"><i data-lucide="moon" class="w-4 h-4 text-indigo-400"></i> حالت تمرکز (بدون انیمیشن)</span>
@@ -787,6 +791,53 @@
 </footer>
 
 <script>
+// === سیستم صدا (Sound System) ===
+let audioCtx = null;
+let soundEnabled = localStorage.getItem('sound_enabled') !== 'false';
+
+function toggleSound() {
+    soundEnabled = !soundEnabled;
+    document.getElementById('sound-toggle').classList.toggle('active', soundEnabled);
+    localStorage.setItem('sound_enabled', soundEnabled);
+    if(soundEnabled) playSound('click');
+}
+
+function playSound(type) {
+    if(!soundEnabled) return;
+    try {
+        if (!audioCtx) audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+        const osc = audioCtx.createOscillator();
+        const gain = audioCtx.createGain();
+        osc.connect(gain);
+        gain.connect(audioCtx.destination);
+
+        if (type === 'correct') {
+            osc.frequency.value = 880; osc.type = 'sine';
+            gain.gain.setValueAtTime(0.2, audioCtx.currentTime);
+            gain.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + 0.3);
+            osc.start(); osc.stop(audioCtx.currentTime + 0.3);
+        } else if (type === 'wrong') {
+            osc.frequency.value = 150; osc.type = 'sawtooth';
+            gain.gain.setValueAtTime(0.2, audioCtx.currentTime);
+            gain.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + 0.4);
+            osc.start(); osc.stop(audioCtx.currentTime + 0.4);
+        } else if (type === 'click') {
+            osc.frequency.value = 400; osc.type = 'square';
+            gain.gain.setValueAtTime(0.1, audioCtx.currentTime);
+            gain.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + 0.1);
+            osc.start(); osc.stop(audioCtx.currentTime + 0.1);
+        } else if (type === 'win') {
+            osc.frequency.setValueAtTime(523.25, audioCtx.currentTime);
+            osc.frequency.setValueAtTime(659.25, audioCtx.currentTime + 0.1);
+            osc.frequency.setValueAtTime(783.99, audioCtx.currentTime + 0.2);
+            osc.type = 'triangle';
+            gain.gain.setValueAtTime(0.2, audioCtx.currentTime);
+            gain.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + 0.4);
+            osc.start(); osc.stop(audioCtx.currentTime + 0.4);
+        }
+    } catch(e) { console.log("Sound error", e); }
+}
+
 const AI_CONFIG = {
     URL: "http://213.142.133.57:20128/v1/chat/completions",
     KEY: "sk-ceb2a8347d399859-akjb89-04bae9f3",
@@ -886,7 +937,6 @@ const DB = {
     SESSION_KEY: 'mathcomp_session',
     TEACHER_KEY: 'mathcomp_teacher',
     
-    // دریافت دیتابیس از سرور
     async init() {
         try {
             const res = await fetch('/api/db');
@@ -899,7 +949,6 @@ const DB = {
         }
     },
     
-    // ذخیره دیتابیس در سرور
     async save() {
         try {
             await fetch('/api/db', {
@@ -1222,7 +1271,7 @@ function checkDailyBonus(){
         var bonus=getDailyBonus(user);
         var newStreak=(now-last<oneDay*2)?(user.streak||0)+1:1;
         DB.updateUser(currentUser,{score:user.score+bonus,lastDaily:now,streak:newStreak});
-        updateUI();showToast('پاداش روزانه: +'+bonus+' سکه!','success');
+        updateUI();showToast('پاداش روزانه: +'+bonus+' سکه! (شعله: '+newStreak+')','success');
     }
 }
 
@@ -1236,6 +1285,7 @@ function updateUI(){
         document.getElementById('nav-username').textContent=currentUser;
         document.getElementById('nav-avatar').textContent=currentUser.charAt(0);
         document.getElementById('nav-coins').textContent=user.score;
+        document.getElementById('nav-streak').textContent=user.streak||0;
         var sc=document.getElementById('nav-sub-container');sc.style.display='flex';
         var sb=document.getElementById('nav-sub-badge');sb.className='sub-badge sub-'+user.subscription;sb.textContent=user.subscription==='free'?'عادی':user.subscription==='eco'?'اکو':'پلاس';
         var lb=document.getElementById('nav-level-badge');var lv=getEffectiveLevel(user);lb.className='level-badge lv'+Math.min(lv,6);lb.textContent=lv;
@@ -1382,6 +1432,7 @@ function handleAnswer(selected,btn){
     }
     if(selected===q.answer){
         btn.classList.add('correct');
+        playSound('correct'); // صدای جواب درست
         var user=DB.getUser(currentUser);
         var mult=getCoinMultiplier(user);
         var base=[0,5,10,15][gameState.selectedDifficulty.multiplier];
@@ -1392,6 +1443,7 @@ function handleAnswer(selected,btn){
         document.getElementById('game-correct').textContent=gameState.correct;
     }else{
         btn.classList.add('wrong','animate-shake');gameState.wrong++;
+        playSound('wrong'); // صدای جواب غلط
         var user=DB.getUser(currentUser);
         if(user.wrongTopics.indexOf(q.category)===-1)user.wrongTopics.push(q.category);
         DB.updateUser(currentUser,{wrongTopics:user.wrongTopics});
@@ -1412,6 +1464,7 @@ function timeOut(){
         var btnVal=Number(allBtns[i].getAttribute('data-value'));
         if(btnVal===q.answer) allBtns[i].classList.add('correct');
     }
+    playSound('wrong'); // صدای اتمام زمان
     var user=DB.getUser(currentUser);
     if(user.subscription!=='free')showToast('جواب درست: '+q.answer,'info');
     gameState.wrong++;
@@ -1429,7 +1482,7 @@ function endGame(){
     var pct=gameState.correct/10;
     var ic=document.getElementById('result-icon'),ti=document.getElementById('result-title'),su=document.getElementById('result-subtitle'),mu=document.getElementById('result-multiplier');
     var mult=getCoinMultiplier(DB.getUser(currentUser));
-    if(pct>=.8){ic.className='w-20 h-20 rounded-full mx-auto mb-6 flex items-center justify-center text-4xl bg-emerald-500/20';ic.textContent='🏆';ti.textContent='عالی بود!';su.textContent='عملکرد فوق‌العاده‌ای داشتی!';}
+    if(pct>=.8){ic.className='w-20 h-20 rounded-full mx-auto mb-6 flex items-center justify-center text-4xl bg-emerald-500/20';ic.textContent='🏆';ti.textContent='عالی بود!';su.textContent='عملکرد فوق‌العاده‌ای داشتی!'; playSound('win');}
     else if(pct>=.5){ic.className='w-20 h-20 rounded-full mx-auto mb-6 flex items-center justify-center text-4xl bg-indigo-500/20';ic.textContent='👍';ti.textContent='خوب بود!';su.textContent='می‌تونی بهتر هم بشی!';}
     else{ic.className='w-20 h-20 rounded-full mx-auto mb-6 flex items-center justify-center text-4xl bg-amber-500/20';ic.textContent='💪';ti.textContent='تلاش بیشتر!';su.textContent='جزوه‌ها رو بخر و تلاش کن!';}
     mu.textContent=mult>1?'ضریب اشتراک: '+mult+'x':'';
@@ -1614,6 +1667,10 @@ function renderPanel(){
     var teachSec = document.getElementById('ai-teaching-section');
     if (user.subscription !== 'free') { teachSec.classList.remove('hidden'); renderAITeaching(); } 
     else { teachSec.classList.add('hidden'); }
+    
+    // Set sound toggle state
+    document.getElementById('sound-toggle').classList.toggle('active', soundEnabled);
+    
     lucide.createIcons({nodes:[document.getElementById('skills-container'), document.getElementById('achievements-container')]});
 }
 
@@ -1761,6 +1818,9 @@ async function startApp() {
     lucide.createIcons();
     document.getElementById('auth-modal').addEventListener('click', function(e) { if(e.target===this) hideAuthModal(); });
     document.getElementById('teacher-modal').addEventListener('click', function(e) { if(e.target===this) hideTeacherModal(); });
+    
+    // Initialize sound toggle UI
+    document.getElementById('sound-toggle').classList.toggle('active', soundEnabled);
 }
 
 startApp();
