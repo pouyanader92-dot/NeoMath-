@@ -1,5 +1,4 @@
 const express = require('express');
-const mongoose = require('mongoose');
 const path = require('path');
 
 const app = express();
@@ -8,22 +7,9 @@ const PORT = process.env.PORT || 3000;
 app.use(express.json());
 app.use(express.static(path.join(__dirname, 'public')));
 
-// اتصال به دیتابیس
-const mongoURI = process.env.MONGODB_URI;
-if (!mongoURI) {
-    console.error('ERROR: MONGODB_URI is not set in Environment Variables!');
-}
-mongoose.connect(mongoURI || 'mongodb://localhost:27017/neoMathDB')
-  .then(() => console.log('✅ Connected to MongoDB Atlas!'))
-  .catch(err => console.error('❌ MongoDB connection error:', err));
-
-// ساخت اسکیما
-const dbSchema = new mongoose.Schema({
-    id: String,
-    data: Object
-}, { collection: 'neoMathDB' });
-
-const Database = mongoose.model('Database', dbSchema);
+const BIN_ID = process.env.JSONBIN_BIN_ID;
+const API_KEY = process.env.JSONBIN_API_KEY;
+const DB_URL = `https://api.jsonbin.io/v3/b/${BIN_ID}`;
 
 const defaultDb = {
     users: [
@@ -44,32 +30,32 @@ const defaultDb = {
 
 app.get('/api/db', async (req, res) => {
     try {
-        let dbDoc = await Database.findOne({ id: 'main' });
-        if (!dbDoc) {
-            dbDoc = new Database({ id: 'main', data: defaultDb });
-            await dbDoc.save();
-            console.log('Default DB created.');
-        }
-        res.json(dbDoc.data);
+        const response = await fetch(DB_URL + '/latest', {
+            headers: { 'X-Master-Key': API_KEY }
+        });
+        if (!response.ok) throw new Error('Failed to fetch');
+        const data = await response.json();
+        res.json(data.record);
     } catch (err) {
-        console.error('GET Error:', err);
-        res.status(500).json({ error: 'Failed to read database' });
+        console.error('GET Error, returning default DB:', err.message);
+        res.json(defaultDb);
     }
 });
 
 app.post('/api/db', async (req, res) => {
     try {
-        let dbDoc = await Database.findOne({ id: 'main' });
-        if (!dbDoc) {
-            dbDoc = new Database({ id: 'main', data: req.body });
-        } else {
-            dbDoc.data = req.body;
-            dbDoc.markModified('data'); // این خط خیلی مهمه برای آپدیت کردن اطلاعات در مونگو
-        }
-        await dbDoc.save();
+        const response = await fetch(DB_URL, {
+            method: 'PUT',
+            headers: {
+                'Content-Type': 'application/json',
+                'X-Master-Key': API_KEY
+            },
+            body: JSON.stringify(req.body)
+        });
+        if (!response.ok) throw new Error('Failed to save');
         res.json({ success: true });
     } catch (err) {
-        console.error('POST Error:', err);
+        console.error('POST Error:', err.message);
         res.status(500).json({ error: 'Failed to save database' });
     }
 });
