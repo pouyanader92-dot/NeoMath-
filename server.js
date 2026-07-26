@@ -8,12 +8,16 @@ const PORT = process.env.PORT || 3000;
 app.use(express.json());
 app.use(express.static(path.join(__dirname, 'public')));
 
-// اتصال به دیتابیس MongoDB (لینک از متغیرهای محیطی خوانده میشه)
-mongoose.connect(process.env.MONGODB_URI || 'mongodb://localhost:27017/neoMathDB')
-  .then(() => console.log('Connected to MongoDB Atlas!'))
-  .catch(err => console.error('MongoDB connection error:', err));
+// اتصال به دیتابیس
+const mongoURI = process.env.MONGODB_URI;
+if (!mongoURI) {
+    console.error('ERROR: MONGODB_URI is not set in Environment Variables!');
+}
+mongoose.connect(mongoURI || 'mongodb://localhost:27017/neoMathDB')
+  .then(() => console.log('✅ Connected to MongoDB Atlas!'))
+  .catch(err => console.error('❌ MongoDB connection error:', err));
 
-// ساخت اسکیما (ساختار دیتابیس)
+// ساخت اسکیما
 const dbSchema = new mongoose.Schema({
     id: String,
     data: Object
@@ -38,21 +42,21 @@ const defaultDb = {
     teacherPassword: 'teacher123'
 };
 
-// API برای گرفتن کل دیتابیس
 app.get('/api/db', async (req, res) => {
     try {
         let dbDoc = await Database.findOne({ id: 'main' });
         if (!dbDoc) {
             dbDoc = new Database({ id: 'main', data: defaultDb });
             await dbDoc.save();
+            console.log('Default DB created.');
         }
         res.json(dbDoc.data);
     } catch (err) {
+        console.error('GET Error:', err);
         res.status(500).json({ error: 'Failed to read database' });
     }
 });
 
-// API برای ذخیره کل دیتابیس
 app.post('/api/db', async (req, res) => {
     try {
         let dbDoc = await Database.findOne({ id: 'main' });
@@ -60,10 +64,12 @@ app.post('/api/db', async (req, res) => {
             dbDoc = new Database({ id: 'main', data: req.body });
         } else {
             dbDoc.data = req.body;
+            dbDoc.markModified('data'); // این خط خیلی مهمه برای آپدیت کردن اطلاعات در مونگو
         }
         await dbDoc.save();
         res.json({ success: true });
     } catch (err) {
+        console.error('POST Error:', err);
         res.status(500).json({ error: 'Failed to save database' });
     }
 });
