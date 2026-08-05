@@ -352,16 +352,20 @@
         <div id="game-setup" class="animate-fadeInUp">
             <div class="text-center mb-10">
                 <h2 class="text-3xl sm:text-4xl font-bold mb-3">شروع مسابقه ریاضی هشتم</h2>
-                <p class="text-neutral-400">دسته‌بندی و سطح سختی رو انتخاب کن</p>
+                <p class="text-neutral-400">دسته‌بندی، سطح سختی و حالت بازی رو انتخاب کن</p>
                 <div id="game-level-info" class="inline-flex items-center gap-2 mt-3 glass-light rounded-full px-4 py-1.5"></div>
             </div>
             <div class="mb-8">
                 <h3 class="text-lg font-semibold mb-4 flex items-center gap-2"><i data-lucide="grid-3x3" class="w-5 h-5 text-indigo-400"></i> دسته‌بندی</h3>
                 <div class="grid grid-cols-2 sm:grid-cols-3 gap-3" id="category-grid"></div>
             </div>
-            <div class="mb-10">
+            <div class="mb-8">
                 <h3 class="text-lg font-semibold mb-4 flex items-center gap-2"><i data-lucide="gauge" class="w-5 h-5 text-purple-400"></i> سطح سختی</h3>
-                <div class="grid grid-cols-3 sm:grid-cols-4 gap-3" id="difficulty-grid"></div>
+                <div class="grid grid-cols-3 gap-3" id="difficulty-grid"></div>
+            </div>
+            <div class="mb-10">
+                <h3 class="text-lg font-semibold mb-4 flex items-center gap-2"><i data-lucide="zap" class="w-5 h-5 text-amber-400"></i> حالت بازی</h3>
+                <div class="grid grid-cols-2 gap-3" id="mode-grid"></div>
             </div>
             <button onclick="startGame()" class="w-full py-4 bg-indigo-600 hover:bg-indigo-500 rounded-xl font-semibold text-lg transition-all hover:scale-[1.02] active:scale-[0.98] flex items-center justify-center gap-2">
                 <i data-lucide="play" class="w-5 h-5"></i>
@@ -370,7 +374,7 @@
         </div>
         <div id="game-play" class="hidden">
             <div class="flex items-center justify-between mb-4">
-                <span class="text-sm text-neutral-400">سوال <span id="q-current" class="text-white font-bold">1</span> از <span id="q-total" class="text-white font-bold">15</span></span>
+                <span class="text-sm text-neutral-400">سوال <span id="q-current" class="text-white font-bold">1</span> از <span id="q-total" class="text-white font-bold">10</span></span>
                 <div class="flex items-center gap-3">
                     <div class="flex items-center gap-1 text-sm text-yellow-400">
                         <i data-lucide="coins" class="w-4 h-4"></i>
@@ -483,7 +487,7 @@
         </div>
         <div class="glass rounded-2xl p-8 mb-6 animate-fadeInUp" style="animation-delay:0.15s;opacity:0;">
             <h3 class="text-xl font-bold mb-4 flex items-center gap-2"><i data-lucide="gamepad-2" class="w-6 h-6 text-indigo-400"></i> مسابقه</h3>
-            <p class="text-sm text-neutral-300">در این بخش شما دسته‌بندی (اعداد، جبر، هندسه و...) و سطح سختی را انتخاب می‌کنید. با شروع بازی، ۱۵ سوال تصادفی از شما پرسیده می‌شود. هرچه سطح سخت‌تر باشد، سکه بیشتری می‌گیرید. با پاسخ اشتباه، هوش مصنوعی مبحث آن سوال را به عنوان نقطه ضعف شما ثبت می‌کند.</p>
+            <p class="text-sm text-neutral-300">در این بخش شما دسته‌بندی (اعداد، جبر، هندسه و...)، سطح سختی و حالت بازی را انتخاب می‌کنید. با شروع بازی، ۱۰ سوال تصادفی از شما پرسیده می‌شود. هرچه سطح سخت‌تر باشد، سکه بیشتری می‌گیرید. با پاسخ اشتباه، هوش مصنوعی مبحث آن سوال را به عنوان نقطه ضعف شما ثبت می‌کند.</p>
         </div>
         <div class="glass rounded-2xl p-8 mb-6 animate-fadeInUp" style="animation-delay:0.2s;opacity:0;">
             <h3 class="text-xl font-bold mb-4 flex items-center gap-2"><i data-lucide="shopping-bag" class="w-6 h-6 text-indigo-400"></i> فروشگاه و کتابخانه</h3>
@@ -926,9 +930,9 @@ function getCoinMultiplier(user){if(user.subscription==='plus')return 1.5;if(use
 function getDailyBonus(user){if(user.subscription==='plus')return 12;if(user.subscription==='eco')return 8;return 5;}
 
 const CAT_REQ={numbers:1,algebra:2,geometry:3,proportion:3,mixed:'plus'};
-const DIFF_REQ={easy:1,medium:2,hard:3,negative:3};
+const DIFF_REQ={easy:1,medium:2,hard:3};
 function isCatUnlocked(catId,user){if(CAT_REQ[catId]==='plus')return user.subscription==='plus';return getEffectiveLevel(user)>=CAT_REQ[catId];}
-function isDiffUnlocked(diffId,user){ if(diffId==='negative') return true; return getEffectiveLevel(user)>=DIFF_REQ[diffId]; }
+function isDiffUnlocked(diffId,user){return getEffectiveLevel(user)>=DIFF_REQ[diffId];}
 function getCatLockText(catId){if(CAT_REQ[catId]==='plus')return 'نیاز به اشتراک پلاس';return 'نیاز به سطح '+CAT_REQ[catId];}
 function getDiffLockText(diffId){return 'نیاز به سطح '+DIFF_REQ[diffId];}
 
@@ -1046,10 +1050,13 @@ const CATEGORIES=[
 const DIFFICULTIES=[
     {id:'easy',name:'آسان',color:'emerald',multiplier:1,time:35},
     {id:'medium',name:'متوسط',color:'amber',multiplier:2,time:25},
-    {id:'hard',name:'سخت',color:'red',multiplier:3,time:20},
-    {id:'negative',name:'نمره منفی',color:'rose',multiplier:4,time:15}
+    {id:'hard',name:'سخت',color:'red',multiplier:3,time:20}
 ];
-const TOTAL_QUESTIONS = 15;
+const GAME_MODES=[
+    {id:'normal',name:'عادی',color:'blue',desc:'بازی استاندارد'},
+    {id:'negative',name:'نمره منفی',color:'rose',desc:'کسر ۱۰ امتیاز برای اشتباه'}
+];
+const TOTAL_QUESTIONS = 10; // تعداد سوالات
 
 function randInt(a,b){return Math.floor(Math.random()*(b-a+1))+a;}
 
@@ -1059,22 +1066,26 @@ function generateQuestion(category,difficulty){
     var question, answer;
     switch(cat){
         case 'numbers': 
-            if(d==='easy' || d==='negative'){var a=randInt(1,50),b=randInt(1,50),op=Math.random()>0.5?'+':'-';question='<span class="math-expr">'+a+' '+op+' '+b+' = ?</span>';answer=op==='+'?a+b:a-b;}
+            if(d==='easy'){var a=randInt(1,50),b=randInt(1,50),op=Math.random()>0.5?'+':'-';question='<span class="math-expr">'+a+' '+op+' '+b+' = ?</span>';answer=op==='+'?a+b:a-b;}
             else if(d==='medium'){var a=randInt(12,99),b=randInt(12,99);question='<span class="math-expr">'+a+' × '+b+' = ?</span>';answer=a*b;} 
-            else{var b=randInt(11,99),ans=randInt(11,99),a=b*ans;question='<span class="math-expr">'+a+' ÷ '+b+' = ?</span>';answer=ans;} 
+            else{
+                var r = randInt(0,1);
+                if(r===0){var b=randInt(11,99),ans=randInt(11,99),a=b*ans;question='<span class="math-expr">'+a+' ÷ '+b+' = ?</span>';answer=ans;}
+                else{var base=randInt(2,9),exp=randInt(2,3);question='<span class="math-expr">'+base+'<sup>'+exp+'</sup> = ?</span>';answer=Math.pow(base,exp);}
+            } 
             break;
         case 'algebra':
-            if(d==='easy' || d==='negative'){var x=randInt(1,10),a=randInt(1,5),b2=a*x;question='اگر <span class="math-expr">'+a+'x = '+b2+'</span> آنگاه x = ؟';answer=x;}
+            if(d==='easy'){var x=randInt(1,10),a=randInt(1,5),b2=a*x;question='اگر <span class="math-expr">'+a+'x = '+b2+'</span> آنگاه x = ؟';answer=x;}
             else if(d==='medium'){var x=randInt(5,25),a=randInt(2,10),b=randInt(10,50),c=a*x+b;question='اگر <span class="math-expr">'+a+'x + '+b+' = '+c+'</span> آنگاه x = ؟';answer=x;} 
             else{var x=randInt(2,12),a=randInt(1,5),b=randInt(-10,10),c=a*x*x+b*x;question='اگر <span class="math-expr">'+a+'x² + '+(b>=0?b:'('+b+')')+'x = '+c+'</span> و x>0 آنگاه x = ؟';answer=x;} 
             break;
         case 'geometry':
-            if(d==='easy' || d==='negative'){var s=randInt(2,15);question='مساحت مربعی به ضلع <span class="math-expr">'+s+'</span> چقدر است؟';answer=s*s;}
+            if(d==='easy'){var s=randInt(2,15);question='مساحت مربعی به ضلع <span class="math-expr">'+s+'</span> چقدر است؟';answer=s*s;}
             else if(d==='medium'){var a=randInt(10,40),b=randInt(10,40);question='مساحت مستطیلی به ابعاد <span class="math-expr">'+a+'</span> و <span class="math-expr">'+b+'</span> چقدر است؟';answer=a*b;} 
             else{var a=randInt(10,30),b=randInt(10,30);var c=Math.round(Math.sqrt(a*a+b*b));question='در مثلث قائم‌الزاویه با دو ضلع <span class="math-expr">'+a+'</span> و <span class="math-expr">'+b+'</span>، طول وتر؟';answer=c;} 
             break;
         case 'proportion':
-            if(d==='easy' || d==='negative'){var pct=[10,20,25,50,75][randInt(0,4)],total=randInt(2,10)*(100/pct),ans=Math.round(total*pct/100);question='<span class="math-expr">'+pct+'%</span> عدد <span class="math-expr">'+total+'</span> چقدر است؟';answer=ans;}
+            if(d==='easy'){var pct=[10,20,25,50,75][randInt(0,4)],total=randInt(2,10)*(100/pct),ans=Math.round(total*pct/100);question='<span class="math-expr">'+pct+'%</span> عدد <span class="math-expr">'+total+'</span> چقدر است؟';answer=ans;}
             else if(d==='medium'){var a=randInt(2,8),b=randInt(2,8),c=randInt(2,8),d2=Math.round(b*c/a);question='اگر <span class="math-expr">'+a+'/'+b+' = '+c+'/x</span> آنگاه x = ؟';answer=d2;}
             else{var price=randInt(5,20)*10,discount=[10,20,25][randInt(0,2)],fp=Math.round(price*(100-discount)/100);question='قیمت <span class="math-expr">'+price+'</span> تومان با <span class="math-expr">'+discount+'%</span> تخفیف چقدر می‌شود؟';answer=fp;}
             break;
@@ -1106,7 +1117,7 @@ function generateQuestion(category,difficulty){
 
 var currentUser = null;
 var isTeacher = false;
-var gameState = {active:false, questions:[], currentQ:0, earned:0, correct:0, wrong:0, selectedCategory:null, selectedDifficulty:null, timerInterval:null, timeLeft:30, answered:false};
+var gameState = {active:false, questions:[], currentQ:0, earned:0, correct:0, wrong:0, selectedCategory:null, selectedDifficulty:null, selectedMode:null, timerInterval:null, timeLeft:30, answered:false};
 
 function showToast(msg, type) {
     type = type || 'success';
@@ -1314,7 +1325,7 @@ function showGameSetup(){
     var user=DB.getUser(currentUser);
     var elv=getEffectiveLevel(user),blv=getLevel(user.score);
     document.getElementById('game-level-info').innerHTML='<span class="level-badge lv'+Math.min(elv,6)+'" style="width:20px;height:20px;font-size:9px;">'+elv+'</span><span class="text-xs text-neutral-400">سطح مؤثر: '+elv+' (پایه: '+blv+')</span>';
-    renderCategoryGrid();renderDifficultyGrid();
+    renderCategoryGrid();renderDifficultyGrid();renderModeGrid();
 }
 function renderCategoryGrid(){
     var user=DB.getUser(currentUser);
@@ -1343,20 +1354,35 @@ function renderDifficultyGrid(){
         html+='<button onclick="'+(unlocked?"selectDifficulty('"+d.id+"')":"")+'" class="option-btn glass rounded-xl p-4 text-center cursor-pointer relative '+(selected?'border-'+d.color+'-500 bg-'+d.color+'-500/10':'')+' '+(unlocked?'':'locked')+'" '+(unlocked?'':'disabled')+'">';
         if(!unlocked) html+='<i data-lucide="lock" class="w-4 h-4 absolute top-2 left-2 text-neutral-600"></i>';
         html+='<div class="text-sm font-medium '+(selected?'text-'+d.color+'-400':unlocked?'':'text-neutral-600')+'">'+d.name+'</div>';
-        html+='<div class="text-xs '+(selected?'text-neutral-300':'text-neutral-500')+' mt-1">'+(d.id==='negative' ? 'کسر ۱۰ امتیاز' : d.multiplier+'x سکه')+'</div>';
+        html+='<div class="text-xs '+(selected?'text-neutral-300':'text-neutral-500')+' mt-1">'+d.multiplier+'x سکه</div>';
         if(!unlocked) html+='<div class="text-[10px] text-neutral-600 mt-1">'+getDiffLockText(d.id)+'</div>';
         html+='</button>';
     }
     document.getElementById('difficulty-grid').innerHTML=html;
     lucide.createIcons({nodes: [document.getElementById('difficulty-grid')]});
 }
+function renderModeGrid(){
+    var html='';
+    for(var mi=0;mi<GAME_MODES.length;mi++){
+        var m=GAME_MODES[mi];
+        var selected=gameState.selectedMode&&gameState.selectedMode.id===m.id;
+        html+='<button onclick="selectMode(\''+m.id+'\')" class="option-btn glass rounded-xl p-4 text-center cursor-pointer relative '+(selected?'border-'+m.color+'-500 bg-'+m.color+'-500/10':'')+'">';
+        html+='<div class="text-sm font-medium '+(selected?'text-'+m.color+'-400':'')+'">'+m.name+'</div>';
+        html+='<div class="text-xs '+(selected?'text-neutral-300':'text-neutral-500')+' mt-1">'+m.desc+'</div>';
+        html+='</button>';
+    }
+    document.getElementById('mode-grid').innerHTML=html;
+    lucide.createIcons({nodes: [document.getElementById('mode-grid')]});
+}
 function selectCategory(id){gameState.selectedCategory=CATEGORIES.find(function(c){return c.id===id;});renderCategoryGrid();}
 function selectDifficulty(id){gameState.selectedDifficulty=DIFFICULTIES.find(function(d){return d.id===id;});renderDifficultyGrid();}
+function selectMode(id){gameState.selectedMode=GAME_MODES.find(function(m){return m.id===id;});renderModeGrid();}
 
 function startGame(){
     var user=DB.getUser(currentUser);
     if(!gameState.selectedCategory){showToast('دسته‌بندی را انتخاب کنید','warning');return;}
     if(!gameState.selectedDifficulty){showToast('سطح سختی را انتخاب کنید','warning');return;}
+    if(!gameState.selectedMode){showToast('حالت بازی را انتخاب کنید','warning');return;}
     if(!isCatUnlocked(gameState.selectedCategory.id,user)){showToast(getCatLockText(gameState.selectedCategory.id),'error');return;}
     if(!isDiffUnlocked(gameState.selectedDifficulty.id,user)){showToast(getDiffLockText(gameState.selectedDifficulty.id),'error');return;}
     gameState.active=true;gameState.currentQ=0;gameState.earned=0;gameState.correct=0;gameState.wrong=0;gameState.questions=[];gameState.answered=false;
@@ -1377,7 +1403,7 @@ function showQuestion(){
     document.getElementById('q-total').textContent=TOTAL_QUESTIONS;
     document.getElementById('game-earned').textContent=gameState.earned;
     document.getElementById('game-correct').textContent=gameState.correct;
-    document.getElementById('question-category-badge').innerHTML='<i data-lucide="tag" class="w-3 h-3"></i> '+catName;
+    document.getElementById('question-category-badge').innerHTML='<i data-lucide="tag" class="w-3 h-3"></i> '+catName + (gameState.selectedMode.id==='negative' ? ' (نمره منفی)' : '');
     document.getElementById('question-text').innerHTML=q.question;
 
     var og=document.getElementById('options-grid');
@@ -1437,7 +1463,7 @@ function handleAnswer(selected,btn){
         playSound('correct');
         var user=DB.getUser(currentUser);
         var mult=getCoinMultiplier(user);
-        var base=[0,5,10,15,20][gameState.selectedDifficulty.multiplier];
+        var base=[0,5,10,15][gameState.selectedDifficulty.multiplier];
         var timeBonus=Math.floor((gameState.timeLeft/gameState.selectedDifficulty.time)*base);
         var total=Math.round((base+timeBonus)*mult);
         gameState.earned+=total;gameState.correct++;
@@ -1450,7 +1476,7 @@ function handleAnswer(selected,btn){
         if(user.wrongTopics.indexOf(q.category)===-1)user.wrongTopics.push(q.category);
         DB.updateUser(currentUser,{wrongTopics:user.wrongTopics});
         
-        if(gameState.selectedDifficulty.id === 'negative') {
+        if(gameState.selectedMode.id === 'negative') {
             gameState.earned -= 10;
             document.getElementById('game-earned').textContent = gameState.earned;
             showToast('پاسخ اشتباه! ۱۰ امتیاز کسر شد', 'error');
@@ -1473,7 +1499,7 @@ function timeOut(){
         var btnVal=Number(allBtns[i].getAttribute('data-value'));
         if(btnVal===q.answer) allBtns[i].classList.add('correct');
     }
-    if(gameState.selectedDifficulty.id === 'negative') {
+    if(gameState.selectedMode.id === 'negative') {
         gameState.earned -= 10;
         document.getElementById('game-earned').textContent = gameState.earned;
         showToast('زمان تمام شد! ۱۰ امتیاز کسر شد', 'error');
