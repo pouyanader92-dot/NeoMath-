@@ -1027,7 +1027,7 @@ const DB = {
     isOwner() { return localStorage.getItem(this.OWNER_KEY)==='true'; },
     setOwner(v) { if(v) localStorage.setItem(this.OWNER_KEY, 'true'); else localStorage.removeItem(this.OWNER_KEY); },
     getTeacherPassword() { return this.data.teacherPassword || 'teacher123'; },
-    getOwnerPassword() { return this.data.ownerPassword || 'OWNER-SECRET-2024'; }
+    getOwnerPassword() { return this.data.ownerPassword || 'owner123'; }
 };
 
 const STORE_ITEMS=[
