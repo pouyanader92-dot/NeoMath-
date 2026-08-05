@@ -602,7 +602,7 @@
                 <button onclick="buySubscription('eco')" id="sub-btn-eco" class="w-full py-3 bg-emerald-600 hover:bg-emerald-500 rounded-xl font-medium transition-all hover:scale-[1.02] active:scale-[0.98]">خرید اشتراک اکو</button>
             </div>
             <div class="glass rounded-2xl p-8 border-yellow-500/30 relative" id="sub-card-plus">
-                <div class="absolute -top-3 left-1/2 -translate-x-1/2 bg-yellow-500 text-black text-xs font-bold px-4 py-1 rounded-full">بهترین</div>
+                <div class="absolute -top-3 left/1/2 -translate-x-1/2 bg-yellow-500 text-black text-xs font-bold px-4 py-1 rounded-full">بهترین</div>
                 <div class="text-center mb-6">
                     <div class="w-14 h-14 rounded-xl bg-yellow-500/10 flex items-center justify-center mx-auto mb-4"><i data-lucide="crown" class="w-7 h-7 text-yellow-400"></i></div>
                     <h3 class="text-xl font-bold mb-1 text-yellow-400">پلاس</h3>
@@ -1708,7 +1708,7 @@ function renderTeacherPanel(){
         var msgHtml='';
         for(var i=0;i<msgs.length;i++){var m=msgs[i];
         msgHtml+='<div class="glass-light rounded-xl p-4 mb-3"><div class="flex items-center gap-2 mb-2"><div class="w-6 h-6 rounded-full bg-indigo-500/20 flex items-center justify-center text-xs font-bold">'+m.from.charAt(0)+'</div><span class="text-sm font-medium">'+m.from+'</span><span class="text-[10px] text-neutral-600">'+new Date(m.date).toLocaleDateString('fa-IR')+' '+new Date(m.date).toLocaleTimeString('fa-IR',{hour:'2-digit',minute:'2-digit'})+'</span></div><p class="text-sm text-neutral-300 mb-3 pr-8">'+m.text+'</p>';
-        if(m.reply)msgHtml+='<div class="pr-8 border-r-2 border-emerald-500/30 mb-3"><span class="text-[10px] text-emerald-400 font-medium">پاسخ شما:</span><p class="text-sm text-emerald-200/80 mt-1">'+m.reply+'</p></div>';
+        if(m.reply)msgHtml+='<div class="pr-8 border-r-2 border-emerald-500/30 mb-3"><span class="text-[10px] text-emerald-400 font-medium">پاسخ شما:</span><p class="text-sm text-emerald-200/80 mt-1>'+m.reply+'</p></div>';
         msgHtml+='<div class="flex gap-2 pr-8"><input type="text" id="reply-'+m.id+'" placeholder="پاسخ..." class="flex-1 bg-white/5 border border-white/10 rounded-lg px-3 py-2 text-sm transition-all" onkeydown="if(event.key===\'Enter\')replyToMessage(\''+m.id+'\')"><button onclick="replyToMessage(\''+m.id+'\')" class="px-4 py-2 bg-amber-600 hover:bg-amber-500 rounded-lg text-sm font-medium transition-all text-black">ارسال پاسخ</button></div></div>';};
         ml.innerHTML=msgHtml;}
     var sl=document.getElementById('teacher-students-list');
@@ -1776,10 +1776,12 @@ function renderPanel(){
     var skillsHtml = '';
     skills.forEach(function(s) {
         var isWeak = user.wrongTopics.indexOf(s.id) !== -1;
-        var skillVal = isWeak ? Math.min(40, user.correctTotal * 2) : Math.min(100, user.correctTotal * 5);
-        if(isWeak && skillVal < 20) skillVal = 20;
-        if(!isWeak && skillVal < 30) skillVal = 30;
-        skillVal = Math.min(100, skillVal);
+        var skillVal = 0;
+        if (isWeak) {
+            skillVal = Math.min(40, user.correctTotal * 2);
+        } else {
+            skillVal = Math.min(100, user.correctTotal * 5);
+        }
         skillsHtml += '<div><div class="flex justify-between text-xs mb-1"><span class="text-neutral-300">'+s.name+'</span><span class="text-'+s.color+'-400">'+skillVal+'%</span></div><div class="w-full bg-white/5 rounded-full h-2 overflow-hidden"><div class="h-full bg-'+s.color+'-500 rounded-full transition-all duration-700" style="width:'+skillVal+'%"></div></div></div>';
     });
     document.getElementById('skills-container').innerHTML = skillsHtml;
@@ -1802,7 +1804,7 @@ function renderPanel(){
     var aiDesc = document.getElementById('ai-desc');
     var aiBadge = document.getElementById('ai-status-badge');
     if (user.subscription === 'free') { aiDesc.textContent = 'با زدن دکمه زیر، هوش مصنوعی نقاط ضعف شما را بررسی کرده و پیشنهاد می‌دهد.'; aiBadge.classList.add('hidden'); } 
-    else { aiDesc.textContent = 'AI به صورت خودکار پیشرفت شما را زیر نظر دارد. گزارش زیر آخرین تحلیل است.'; aiBadge.classList.remove('hidden'); }
+    else { aiDesc.textContent = 'AI به صورت خودکار پیشرفت شما را زیر نظر داشت. گزارش زیر آخرین تحلیل است.'; aiBadge.classList.remove('hidden'); }
     var teachSec = document.getElementById('ai-teaching-section');
     if (user.subscription !== 'free') { teachSec.classList.remove('hidden'); renderAITeaching(); } 
     else { teachSec.classList.add('hidden'); }
