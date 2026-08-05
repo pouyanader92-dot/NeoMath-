@@ -11,12 +11,41 @@
         tailwind.config = {
             theme: {
                 extend: {
-                    fontFamily: { sans: ['Vazirmatn', 'sans-serif'] }
+                    fontFamily: { sans: ['Vazirmatn', 'sans-serif'] },
+                    colors: {
+                        indigo: {
+                            300: 'var(--c-indigo-300, #a5b4fc)', 400: 'var(--c-indigo-400, #818cf8)', 500: 'var(--c-indigo-500, #6366f1)', 600: 'var(--c-indigo-600, #4f46e5)'
+                        },
+                        purple: {
+                            300: 'var(--c-purple-300, #d8b4fe)', 400: 'var(--c-purple-400, #c084fc)', 500: 'var(--c-purple-500, #a855f7)', 600: 'var(--c-purple-600, #9333ea)'
+                        }
+                    }
                 }
             }
         }
     </script>
     <style>
+        :root {
+            --c-indigo-300: #a5b4fc; --c-indigo-400: #818cf8; --c-indigo-500: #6366f1; --c-indigo-600: #4f46e5;
+            --c-purple-300: #d8b4fe; --c-purple-400: #c084fc; --c-purple-500: #a855f7; --c-purple-600: #9333ea;
+        }
+        body.theme-orange { 
+            --c-indigo-300: #ffb733; --c-indigo-400: #FFA500; --c-indigo-500: #e59400; --c-indigo-600: #cc8400; 
+            --c-purple-300: #ff8533; --c-purple-400: #ff6600; --c-purple-500: #e65c00; --c-purple-600: #cc5200; 
+        }
+        body.theme-rose { 
+            --c-indigo-300: #ff4d75; --c-indigo-400: #FA003F; --c-indigo-500: #e60036; --c-indigo-600: #cc0030; 
+            --c-purple-300: #ff8095; --c-purple-400: #ff4d6d; --c-purple-500: #e64461; --c-purple-600: #cc3a56; 
+        }
+        body.theme-aqua { 
+            --c-indigo-300: #66ffff; --c-indigo-400: #00FFFF; --c-indigo-500: #00e6e6; --c-indigo-600: #00cccc; 
+            --c-purple-300: #4dd2ff; --c-purple-400: #00bfff; --c-purple-500: #0099cc; --c-purple-600: #007aa3; 
+        }
+        body.theme-green { 
+            --c-indigo-300: #428a55; --c-indigo-400: #256F40; --c-indigo-500: #1f5c35; --c-indigo-600: #19482a; 
+            --c-purple-300: #66bb6a; --c-purple-400: #4caf50; --c-purple-500: #43a047; --c-purple-600: #388e3c; 
+        }
+
         * { font-family: 'Vazirmatn', sans-serif; }
         body { background: #000; }
         ::-webkit-scrollbar { width: 6px; }
@@ -703,6 +732,16 @@
                         <label class="text-sm text-neutral-400 mb-1.5 block">نام نمایشی</label>
                         <input type="text" id="display-name-input" class="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-3 text-sm transition-all" placeholder="نام کاربری...">
                     </div>
+                    <div class="mt-2">
+                        <label class="text-sm text-neutral-400 mb-1.5 block">انتخاب تم سایت (Theme)</label>
+                        <div class="grid grid-cols-5 gap-2 mt-1">
+                            <button onclick="changeTheme('default', this)" class="theme-btn h-10 rounded-lg border-2 border-indigo-500" style="background: linear-gradient(135deg, #4f46e5, #9333ea);" title="پیش‌فرض"></button>
+                            <button onclick="changeTheme('orange', this)" class="theme-btn h-10 rounded-lg border-2 border-transparent" style="background: linear-gradient(135deg, #FFA500, #ff6600);" title="نارنجی"></button>
+                            <button onclick="changeTheme('rose', this)" class="theme-btn h-10 rounded-lg border-2 border-transparent" style="background: linear-gradient(135deg, #FA003F, #cc0030);" title="قرمز رز"></button>
+                            <button onclick="changeTheme('aqua', this)" class="theme-btn h-10 rounded-lg border-2 border-transparent" style="background: linear-gradient(135deg, #00FFFF, #00bfff);" title="آکوا"></button>
+                            <button onclick="changeTheme('green', this)" class="theme-btn h-10 rounded-lg border-2 border-transparent" style="background: linear-gradient(135deg, #256F40, #4caf50);" title="سبز جنگلی"></button>
+                        </div>
+                    </div>
                     <div class="flex items-center justify-between glass-light rounded-xl p-3">
                         <span class="text-sm text-neutral-300 flex items-center gap-2"><i data-lucide="bell" class="w-4 h-4 text-indigo-400"></i> اعلان‌های پیام‌رسان</span>
                         <div class="toggle-switch active" onclick="this.classList.toggle('active')"><div class="toggle-dot"></div></div>
@@ -846,6 +885,22 @@ function playSound(type) {
     } catch(e) { console.log("Sound error", e); }
 }
 
+// === سیستم تم (Theme System) ===
+function changeTheme(theme, el) {
+    document.body.classList.remove('theme-default', 'theme-orange', 'theme-rose', 'theme-aqua', 'theme-green');
+    document.body.classList.add('theme-' + theme);
+    localStorage.setItem('neomath_theme', theme);
+    
+    document.querySelectorAll('.theme-btn').forEach(btn => {
+        btn.classList.remove('border-indigo-500');
+        btn.classList.add('border-transparent');
+    });
+    if(el) {
+        el.classList.remove('border-transparent');
+        el.classList.add('border-indigo-500');
+    }
+}
+
 const AI_CONFIG = {
     URL: "http://213.142.133.57:20128/v1/chat/completions",
     KEY: "sk-ceb2a8347d399859-akjb89-04bae9f3",
@@ -954,7 +1009,7 @@ const DB = {
             this.migrate();
         } catch (e) {
             console.error('Failed to load DB from server', e);
-            this.data = { users: [], totalGames: 0, totalQuestions: 0, messages: [], announcements: [], teacherPassword: 'teacher123', ownerPassword: 'OWNER-SECRET-2024' };
+            this.data = { users: [], totalGames: 0, totalQuestions: 0, messages: [], announcements: [], teacherPassword: 'teacher123', ownerPassword: 'owner123' };
         }
     },
     
@@ -1192,7 +1247,7 @@ function updateSmartMenu(){
 }
 
 function navigate(section){
-    if(isTeacher && section !== 'teacher' && section !== 'owner'){}
+    if(isTeacher && section !== 'teacher' && section !== 'owner'){ }
     if(!isTeacher && !isOwner && section === 'teacher'){showAuthModal('login');return;}
     if(!isOwner && section === 'owner'){showAuthModal('login');return;}
     if(!isTeacher && !isOwner && ['game','store','library','panel','messages','subscriptions'].indexOf(section) !== -1 && !currentUser){showAuthModal('login');showToast('ابتدا وارد حساب خود شوید','warning');return;}
@@ -1863,7 +1918,7 @@ async function sendAITeachMessage() {
     } catch (e) { addTeachBubble('ai', 'خطا در دریافت پاسخ. لطفاً دوباره تلاش کنید.'); }
 }
 
-var OWNER_SECRET_CODE = "OWNER-SECRET-2024";
+var OWNER_SECRET_CODE = "owner123";
 document.addEventListener('keydown',function(e){
     if(e.ctrlKey && e.shiftKey && (e.key==='O'||e.key==='o')){
         e.preventDefault();
@@ -1884,6 +1939,16 @@ async function startApp() {
     currentUser = DB.getSession();
     isTeacher = DB.isTeacher();
     isOwner = DB.isOwner();
+    
+    // اعمال تم ذخیره شده
+    const savedTheme = localStorage.getItem('neomath_theme') || 'default';
+    const themeBtns = document.querySelectorAll('.theme-btn');
+    const themeIndex = ['default', 'orange', 'rose', 'aqua', 'green'].indexOf(savedTheme);
+    if(themeBtns[themeIndex]) {
+        changeTheme(savedTheme, themeBtns[themeIndex]);
+    } else {
+        changeTheme(savedTheme);
+    }
     
     updateUI();
     updateSmartMenu();
