@@ -124,7 +124,14 @@
         .lv6 { background: rgba(251,191,36,0.15); color: #fbbf24; }
         .notif-dot { width: 8px; height: 8px; background: #ef4444; border-radius: 50%; position: absolute; top: -2px; left: -2px; }
 
-        .math-expr { direction: ltr; unicode-bidi: embed; display: inline-block; text-align: left; font-family: 'Vazirmatn', monospace; letter-spacing: 0.05em; }
+        .math-expr { 
+            direction: ltr; 
+            unicode-bidi: embed; 
+            display: inline-block; 
+            text-align: left; 
+            font-family: 'Vazirmatn', monospace; 
+            letter-spacing: 0.05em;
+        }
 
         .ai-popup { animation: slideInRight 0.5s cubic-bezier(0.4, 0, 0.2, 1) forwards; pointer-events: auto; }
         #ai-popup-container { pointer-events: none; }
@@ -146,12 +153,12 @@
 </button>
 
 <nav id="main-nav" class="fixed top-0 left-0 right-0 z-50 pt-3 px-4">
-    <div class="max-w-7xl mx-auto glass rounded-xl px-4 sm:px-6 py-2.5 flex items-center justify-between flex-nowrap">
+    <div class="max-w-7xl mx-auto glass rounded-xl px-4 sm:px-6 py-3 flex items-center justify-between flex-nowrap">
         <div class="flex items-center gap-3 cursor-pointer flex-shrink-0" onclick="navigate('home')">
-            <div class="w-9 h-9 rounded-xl bg-gradient-to-br from-indigo-500 to-purple-600 flex items-center justify-center text-base font-bold">∑</div>
-            <span class="text-base font-bold bg-gradient-to-l from-indigo-400 to-purple-400 bg-clip-text text-transparent hidden sm:block">نئو ریاضی</span>
+            <div class="w-10 h-10 rounded-xl bg-gradient-to-br from-indigo-500 to-purple-600 flex items-center justify-center text-lg font-bold">∑</div>
+            <span class="text-lg font-bold bg-gradient-to-l from-indigo-400 to-purple-400 bg-clip-text text-transparent hidden sm:block">نئو ریاضی</span>
         </div>
-        <div class="hidden lg:flex items-center gap-4 flex-1 justify-center">
+        <div class="hidden lg:flex items-center gap-5 flex-1 justify-center">
             <a class="nav-link text-sm text-neutral-400 hover:text-white transition-colors cursor-pointer" data-nav="home" onclick="navigate('home')">خانه</a>
             <a class="nav-link text-sm text-neutral-400 hover:text-white transition-colors cursor-pointer" data-nav="game" onclick="navigate('game')">مسابقه</a>
             <a class="nav-link text-sm text-neutral-400 hover:text-white transition-colors cursor-pointer" data-nav="store" onclick="navigate('store')">فروشگاه</a>
@@ -165,42 +172,42 @@
                 <span id="msg-notif" class="notif-dot hidden"></span>
             </a>
         </div>
-        <div class="flex items-center gap-2 flex-shrink-0">
-            <div id="auth-buttons">
-                <button onclick="showAuthModal('login')" class="px-3 py-1.5 text-sm font-medium text-neutral-300 hover:text-white transition-colors">ورود</button>
-                <button onclick="showAuthModal('register')" class="px-3 py-1.5 text-sm font-medium bg-indigo-600 hover:bg-indigo-500 rounded-lg transition-all hover:scale-105">ثبت‌نام</button>
+        <div class="flex items-center gap-2 sm:gap-3 flex-shrink-0">
+            <div id="auth-buttons" class="flex items-center gap-2">
+                <button onclick="showAuthModal('login')" class="px-3 sm:px-4 py-2 text-sm font-medium text-neutral-300 hover:text-white transition-colors">ورود</button>
+                <button onclick="showAuthModal('register')" class="px-4 py-2 text-sm font-medium bg-indigo-600 hover:bg-indigo-500 rounded-lg transition-all hover:scale-105">ثبت‌نام</button>
             </div>
-            <div id="user-menu" class="hidden items-center gap-2">
-                <div class="flex items-center gap-1 glass-light rounded-lg px-2 py-1">
-                    <i data-lucide="coins" class="w-3 h-3 text-yellow-400"></i>
-                    <span id="nav-coins" class="text-xs font-medium text-yellow-400">0</span>
+            <div id="user-menu" class="hidden flex items-center gap-2 sm:gap-3">
+                <div class="flex items-center gap-1.5 glass-light rounded-lg px-2.5 py-1.5">
+                    <i data-lucide="coins" class="w-3.5 h-3.5 text-yellow-400"></i>
+                    <span id="nav-coins" class="text-xs sm:text-sm font-medium text-yellow-400">0</span>
                 </div>
-                <div class="flex items-center gap-1 glass-light rounded-lg px-2 py-1 hidden md:flex">
-                    <i data-lucide="flame" class="w-3 h-3 text-orange-500"></i>
-                    <span id="nav-streak" class="text-xs font-medium text-orange-500">0</span>
+                <div class="flex items-center gap-1.5 glass-light rounded-lg px-2.5 py-1.5">
+                    <i data-lucide="flame" class="w-3.5 h-3.5 text-orange-500"></i>
+                    <span id="nav-streak" class="text-xs sm:text-sm font-medium text-orange-500">0</span>
                 </div>
-                <div class="items-center gap-1 hidden md:flex" id="nav-sub-container" style="display:none;">
+                <div class="flex items-center gap-1.5" id="nav-sub-container" style="display:none;">
                     <span id="nav-sub-badge" class="sub-badge"></span>
                     <span id="nav-level-badge" class="level-badge lv1">1</span>
                 </div>
-                <button onclick="navigate('panel')" class="flex items-center gap-1.5 px-1.5 py-1 rounded-lg hover:bg-white/5 transition-colors">
-                    <div class="w-7 h-7 rounded-full bg-gradient-to-br from-indigo-500 to-purple-600 flex items-center justify-center text-xs font-bold" id="nav-avatar">ع</div>
+                <button onclick="navigate('panel')" class="flex items-center gap-2 px-2 py-1.5 rounded-lg hover:bg-white/5 transition-colors">
+                    <div class="w-8 h-8 rounded-full bg-gradient-to-br from-indigo-500 to-purple-600 flex items-center justify-center text-xs font-bold" id="nav-avatar">ع</div>
                     <span id="nav-username" class="text-sm font-medium hidden sm:block">کاربر</span>
                 </button>
-                <button onclick="logout()" class="p-1.5 rounded-lg hover:bg-white/5 text-neutral-400 hover:text-red-400 transition-colors" title="خروج">
+                <button onclick="logout()" class="p-2 rounded-lg hover:bg-white/5 text-neutral-400 hover:text-red-400 transition-colors" title="خروج">
                     <i data-lucide="log-out" class="w-4 h-4"></i>
                 </button>
             </div>
-            <div id="teacher-menu" class="hidden items-center gap-2">
-                <span class="text-sm font-medium text-amber-400 hidden md:block" id="panel-title-nav">پنل استاد</span>
-                <button onclick="logout()" class="p-1.5 rounded-lg hover:bg-white/5 text-neutral-400 hover:text-red-400 transition-colors">
+            <div id="teacher-menu" class="hidden flex items-center gap-2">
+                <span class="text-sm font-medium text-amber-400" id="panel-title-nav">پنل استاد</span>
+                <button onclick="logout()" class="p-2 rounded-lg hover:bg-white/5 text-neutral-400 hover:text-red-400 transition-colors">
                     <i data-lucide="log-out" class="w-4 h-4"></i>
                 </button>
             </div>
-            <button onclick="hideNavbar()" class="p-1.5 rounded-lg hover:bg-white/5 text-neutral-400 hover:text-white transition-colors hidden lg:block" title="پنهان کردن منو">
-                <i data-lucide="chevron-up" class="w-4 h-4"></i>
+            <button onclick="hideNavbar()" class="p-2 rounded-lg hover:bg-white/5 text-neutral-400 hover:text-white transition-colors" title="پنهان کردن منو">
+                <i data-lucide="chevron-up" class="w-5 h-5"></i>
             </button>
-            <button onclick="toggleMobileMenu()" class="lg:hidden p-1.5 rounded-lg hover:bg-white/5">
+            <button onclick="toggleMobileMenu()" class="lg:hidden p-2 rounded-lg hover:bg-white/5">
                 <i data-lucide="menu" class="w-5 h-5"></i>
             </button>
         </div>
@@ -1645,7 +1652,7 @@ function renderLeaderboard(){
         var rc='text-neutral-400',ri=i+1;
         if(i===0){rc='rank-gold';ri='🥇';}else if(i===1){rc='rank-silver';ri='🥈';}else if(i===2){rc='rank-bronze';ri='🥉';}
         var subText=u.subscription==='free'?'عادی':u.subscription==='eco'?'اکو':'پلاس';
-        listHtml+='<div class="grid grid-cols-[60px_1fr_80px_100px] gap-4 px-6 py-4 border-b border-white/5 items-center transition-colors hover:bg-white/[0.02] '+(isMe?'bg-indigo-500/5 border-r-2 border-r-indigo-500':'')+'"><span class="'+rc+' text-center font-bold>'+ri+'</span><div class="flex items-center gap-3"><div class="w-8 h-8 rounded-full bg-gradient-to-br from-indigo-500 to-purple-600 flex items-center justify-center text-xs font-bold shrink-0">'+u.username.charAt(0)+'</div><div class="flex items-center gap-1.5 flex-wrap"><span class="text-sm font-medium '+(isMe?'text-indigo-400':'')+'">'+u.username+(isMe?' (شما)':'')+'</span><span class="sub-badge sub-'+u.subscription+'">'+subText+'</span></div></div><div class="text-center"><span class="level-badge lv'+Math.min(elv,6)+'">Lv.'+elv+'</span></div><div class="text-left flex items-center gap-1.5"><i data-lucide="coins" class="w-4 h-4 text-yellow-400"></i><span class="text-sm font-bold text-yellow-400">'+u.score+'</span></div></div>';
+        listHtml+='<div class="grid grid-cols-[60px_1fr_80px_100px] gap-4 px-6 py-4 border-b border-white/5 items-center transition-colors hover:bg-white/[0.02] '+(isMe?'bg-indigo-500/5 border-r-2 border-r-indigo-500':'')+'"><span class="'+rc+' text-center font-bold">'+ri+'</span><div class="flex items-center gap-3"><div class="w-8 h-8 rounded-full bg-gradient-to-br from-indigo-500 to-purple-600 flex items-center justify-center text-xs font-bold shrink-0">'+u.username.charAt(0)+'</div><div class="flex items-center gap-1.5 flex-wrap"><span class="text-sm font-medium '+(isMe?'text-indigo-400':'')+'">'+u.username+(isMe?' (شما)':'')+'</span><span class="sub-badge sub-'+u.subscription+'">'+subText+'</span></div></div><div class="text-center"><span class="level-badge lv'+Math.min(elv,6)+'">Lv.'+elv+'</span></div><div class="text-left flex items-center gap-1.5"><i data-lucide="coins" class="w-4 h-4 text-yellow-400"></i><span class="text-sm font-bold text-yellow-400">'+u.score+'</span></div></div>';
     }
     list.innerHTML=listHtml;lucide.createIcons({nodes:[pod,list]});
 }
