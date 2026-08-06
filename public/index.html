@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>نئو ریاضی - مسابقات مدرسه (نسخه کامل با AI)</title>
-    <link rel="icon" type="image/jpg" href="/icon.jpg">
+    <link rel="icon" type="image/jpg" href="icon.jpg">
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://unpkg.com/lucide@latest"></script>
     <link href="https://fonts.googleapis.com/css2?family=Vazirmatn:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
@@ -172,6 +172,7 @@
                 پیام‌ها
                 <span id="msg-notif" class="notif-dot hidden"></span>
             </a>
+            <a class="nav-link text-sm text-neutral-400 hover:text-white transition-colors cursor-pointer" data-nav="about" onclick="navigate('about')">درباره ما</a>
         </div>
         <div class="flex items-center gap-2 sm:gap-3 flex-shrink-0">
             <div id="auth-buttons" class="flex items-center gap-2">
@@ -224,6 +225,7 @@
             <a class="text-sm text-neutral-400 hover:text-white cursor-pointer py-2 px-3 rounded-lg hover:bg-white/5" onclick="navigate('calculator');toggleMobileMenu()">ماشین حساب</a>
             <a class="text-sm text-neutral-400 hover:text-white cursor-pointer py-2 px-3 rounded-lg hover:bg-white/5" onclick="navigate('subscriptions');toggleMobileMenu()">اشتراک‌ها</a>
             <a class="text-sm text-neutral-400 hover:text-white cursor-pointer py-2 px-3 rounded-lg hover:bg-white/5 relative" onclick="navigate('messages');toggleMobileMenu()">پیام‌ها <span id="msg-notif-m" class="notif-dot hidden"></span></a>
+            <a class="text-sm text-neutral-400 hover:text-white cursor-pointer py-2 px-3 rounded-lg hover:bg-white/5" onclick="navigate('about');toggleMobileMenu()">درباره ما</a>
             <a class="text-sm text-neutral-400 hover:text-white cursor-pointer py-2 px-3 rounded-lg hover:bg-white/5 hidden" id="owner-nav-mobile" onclick="navigate('owner');toggleMobileMenu()">پنل اونر</a>
         </div>
     </div>
@@ -640,6 +642,55 @@
     </div>
 </section>
 
+<section id="section-about" class="section-hidden pt-24 pb-24 px-4">
+    <div class="max-w-3xl mx-auto mt-4">
+        <div class="glass rounded-2xl p-8 animate-fadeInUp relative overflow-hidden">
+            <div class="absolute inset-0 pointer-events-none">
+                <div class="absolute top-0 right-0 w-40 h-40 bg-indigo-500/10 rounded-full blur-3xl"></div>
+                <div class="absolute bottom-0 left-0 w-40 h-40 bg-purple-500/10 rounded-full blur-3xl"></div>
+            </div>
+            <div class="relative z-10 flex flex-col items-center text-center mb-8">
+                <div class="w-20 h-20 rounded-2xl bg-gradient-to-br from-indigo-500 to-purple-600 flex items-center justify-center text-3xl font-bold mb-4">∑</div>
+                <h1 class="text-3xl font-bold bg-gradient-to-l from-indigo-400 to-purple-400 bg-clip-text text-transparent">درباره ما - NeoMath</h1>
+                <p class="text-sm text-neutral-400 mt-2">پلتفرم آموزشی و مسابقات ریاضی</p>
+            </div>
+            <p class="text-neutral-300 text-center leading-relaxed mb-8 relative z-10">
+                نئو ریاضی یک پلتفرم آموزشی و مسابقاتی است که با هدف ارتقای سطح دانش ریاضی دانش‌آموزان پایه هشتم طراحی شده است. ما با استفاده از تکنولوژی‌های روز، از جمله هوش مصنوعی، یادگیری ریاضی را به تجربه‌ای جذاب و دوستانه تبدیل کرده‌ایم. این پلتفرم برای علاقه‌مندان به ریاضی ساخته شده تا در فضایی رقابتی و چالش‌برانگیز مهارت‌های خود را محک بزنند.
+            </p>
+            <div class="relative z-10 glass-light rounded-xl p-6 grid sm:grid-cols-2 gap-6 text-sm">
+                <div class="flex items-center gap-3">
+                    <div class="w-10 h-10 rounded-lg bg-indigo-500/10 flex items-center justify-center shrink-0"><i data-lucide="user" class="w-5 h-5 text-indigo-400"></i></div>
+                    <div>
+                        <div class="text-neutral-500 text-xs">طراح و توسعه‌دهنده</div>
+                        <div class="text-white font-medium">پویا نادر</div>
+                    </div>
+                </div>
+                <div class="flex items-center gap-3">
+                    <div class="w-10 h-10 rounded-lg bg-purple-500/10 flex items-center justify-center shrink-0"><i data-lucide="mail" class="w-5 h-5 text-purple-400"></i></div>
+                    <div>
+                        <div class="text-neutral-500 text-xs">ایمیل</div>
+                        <div class="text-white font-medium" dir="ltr">neomathi@neomath.ir</div>
+                    </div>
+                </div>
+                <div class="flex items-center gap-3">
+                    <div class="w-10 h-10 rounded-lg bg-emerald-500/10 flex items-center justify-center shrink-0"><i data-lucide="phone" class="w-5 h-5 text-emerald-400"></i></div>
+                    <div>
+                        <div class="text-neutral-500 text-xs">شماره تماس</div>
+                        <div class="text-white font-medium" dir="ltr">09360090737</div>
+                    </div>
+                </div>
+                <div class="flex items-center gap-3">
+                    <div class="w-10 h-10 rounded-lg bg-amber-500/10 flex items-center justify-center shrink-0"><i data-lucide="instagram" class="w-5 h-5 text-amber-400"></i></div>
+                    <div>
+                        <div class="text-neutral-500 text-xs">شبکه‌های اجتماعی</div>
+                        <div class="text-white font-medium">PouyaNader92</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
 <section id="section-panel" class="section-hidden pt-24 pb-24 px-4">
     <div class="max-w-5xl mx-auto mt-4">
         <div class="text-center mb-10 animate-fadeInUp">
@@ -829,7 +880,7 @@
 </section>
 
 <footer class="border-t border-white/5 py-8 px-4">
-    <div class="max-w-7xl mx-auto flex flex-col sm:flex-row items-center justify-between gap-4">
+    <div class="max-w-7xl mx-auto flex flex-col sm:flexrow items-center justify-between gap-4">
         <div class="flex items-center gap-2">
             <div class="w-8 h-8 rounded-lg bg-gradient-to-br from-indigo-500 to-purple-600 flex items-center justify-center text-sm font-bold">∑</div>
             <span class="text-sm font-semibold text-neutral-400">نئو ریاضی</span>
