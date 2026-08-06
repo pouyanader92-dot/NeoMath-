@@ -4,7 +4,6 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>نئو ریاضی - مسابقات مدرسه (نسخه کامل با AI)</title>
-    <link rel="icon" type="image/jpg" href="icon.jpg">
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://unpkg.com/lucide@latest"></script>
     <link href="https://fonts.googleapis.com/css2?family=Vazirmatn:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
@@ -657,7 +656,8 @@
             <p class="text-neutral-300 text-center leading-relaxed mb-8 relative z-10">
                 نئو ریاضی یک پلتفرم آموزشی و مسابقاتی است که با هدف ارتقای سطح دانش ریاضی دانش‌آموزان پایه هشتم طراحی شده است. ما با استفاده از تکنولوژی‌های روز، از جمله هوش مصنوعی، یادگیری ریاضی را به تجربه‌ای جذاب و دوستانه تبدیل کرده‌ایم. این پلتفرم برای علاقه‌مندان به ریاضی ساخته شده تا در فضایی رقابتی و چالش‌برانگیز مهارت‌های خود را محک بزنند.
             </p>
-            <div class="relative z-10 glass-light rounded-xl p-6 grid sm:grid-cols-2 gap-6 text-sm">
+            
+            <div class="relative z-10 glass-light rounded-xl p-6 grid sm:grid-cols-2 gap-6 text-sm mb-8">
                 <div class="flex items-center gap-3">
                     <div class="w-10 h-10 rounded-lg bg-indigo-500/10 flex items-center justify-center shrink-0"><i data-lucide="user" class="w-5 h-5 text-indigo-400"></i></div>
                     <div>
@@ -679,12 +679,26 @@
                         <div class="text-white font-medium" dir="ltr">09360090737</div>
                     </div>
                 </div>
-                <div class="flex items-center gap-3">
-                    <div class="w-10 h-10 rounded-lg bg-amber-500/10 flex items-center justify-center shrink-0"><i data-lucide="instagram" class="w-5 h-5 text-amber-400"></i></div>
-                    <div>
-                        <div class="text-neutral-500 text-xs">شبکه‌های اجتماعی</div>
-                        <div class="text-white font-medium">PouyaNader92</div>
-                    </div>
+            </div>
+
+            <div class="relative z-10">
+                <div class="text-neutral-400 text-sm mb-4 text-center">ما را در شبکه‌های اجتماعی دنبال کنید:</div>
+                <div class="flex justify-center gap-4 flex-wrap">
+                    <a href="#" class="w-12 h-12 rounded-full bg-gradient-to-br from-fuchsia-600 to-pink-500 flex items-center justify-center hover:scale-110 transition-transform shadow-lg">
+                        <i data-lucide="instagram" class="w-6 h-6 text-white"></i>
+                    </a>
+                    <a href="#" class="w-12 h-12 rounded-full bg-sky-500 flex items-center justify-center hover:scale-110 transition-transform shadow-lg">
+                        <i data-lucide="send" class="w-6 h-6 text-white"></i>
+                    </a>
+                    <a href="#" class="w-12 h-12 rounded-full bg-green-500 flex items-center justify-center hover:scale-110 transition-transform shadow-lg">
+                        <i data-lucide="message-circle" class="w-6 h-6 text-white"></i>
+                    </a>
+                    <a href="#" class="w-12 h-12 rounded-full bg-red-600 flex items-center justify-center hover:scale-110 transition-transform shadow-lg">
+                        <i data-lucide="youtube" class="w-6 h-6 text-white"></i>
+                    </a>
+                    <a href="#" class="w-12 h-12 rounded-full bg-neutral-700 flex items-center justify-center hover:scale-110 transition-transform shadow-lg">
+                        <i data-lucide="globe" class="w-6 h-6 text-white"></i>
+                    </a>
                 </div>
             </div>
         </div>
@@ -880,7 +894,7 @@
 </section>
 
 <footer class="border-t border-white/5 py-8 px-4">
-    <div class="max-w-7xl mx-auto flex flex-col sm:flexrow items-center justify-between gap-4">
+    <div class="max-w-7xl mx-auto flex flex-col sm:flex-row items-center justify-between gap-4">
         <div class="flex items-center gap-2">
             <div class="w-8 h-8 rounded-lg bg-gradient-to-br from-indigo-500 to-purple-600 flex items-center justify-center text-sm font-bold">∑</div>
             <span class="text-sm font-semibold text-neutral-400">نئو ریاضی</span>
@@ -1335,6 +1349,9 @@ function navigate(section){
     if(section==='messages') renderMessages();
     if(section==='teacher') renderTeacherPanel();
     if(section==='owner') renderOwnerPanel();
+    
+    lucide.createIcons(); // لود خودکار آیکون‌ها با هر بار تغییر بخش
+    
     window.scrollTo({top:0,behavior:'smooth'});
 }
 function toggleMobileMenu(){document.getElementById('mobile-menu').classList.toggle('hidden');}
