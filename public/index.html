@@ -6,6 +6,8 @@
     <title>نئو ریاضی - مسابقات مدرسه (نسخه کامل با AI)</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://unpkg.com/lucide@latest"></script>
+    <!-- اضافه شدن کتابخانه فونت آسام برای آیکون‌های شبکه‌های اجتماعی -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
     <link href="https://fonts.googleapis.com/css2?family=Vazirmatn:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
     <script>
         tailwind.config = {
@@ -89,10 +91,7 @@
         .option-btn.locked { opacity: 0.35; cursor: not-allowed !important; }
         .option-btn.locked:hover { background: transparent; border-color: rgba(255,255,255,0.08); transform: none; }
 
-        #main-nav { 
-            transition: transform 0.4s cubic-bezier(0.4, 0, 0.2, 1), top 0.4s ease; 
-            will-change: transform; 
-        }
+        #main-nav { transition: transform 0.4s cubic-bezier(0.4, 0, 0.2, 1), top 0.4s ease; will-change: transform; }
         #main-nav.nav-hidden { transform: translateY(-150%); }
         
         .nav-link { position: relative; transition: all 0.3s; white-space: nowrap; }
@@ -124,14 +123,7 @@
         .lv6 { background: rgba(251,191,36,0.15); color: #fbbf24; }
         .notif-dot { width: 8px; height: 8px; background: #ef4444; border-radius: 50%; position: absolute; top: -2px; left: -2px; }
 
-        .math-expr { 
-            direction: ltr; 
-            unicode-bidi: embed; 
-            display: inline-block; 
-            text-align: left; 
-            font-family: 'Vazirmatn', monospace; 
-            letter-spacing: 0.05em;
-        }
+        .math-expr { direction: ltr; unicode-bidi: embed; display: inline-block; text-align: left; font-family: 'Vazirmatn', monospace; letter-spacing: 0.05em; }
 
         .ai-popup { animation: slideInRight 0.5s cubic-bezier(0.4, 0, 0.2, 1) forwards; pointer-events: auto; }
         #ai-popup-container { pointer-events: none; }
@@ -684,20 +676,41 @@
             <div class="relative z-10">
                 <div class="text-neutral-400 text-sm mb-4 text-center">ما را در شبکه‌های اجتماعی دنبال کنید:</div>
                 <div class="flex justify-center gap-4 flex-wrap">
+                    <!-- اینستاگرام -->
                     <a href="#" class="w-12 h-12 rounded-full bg-gradient-to-br from-fuchsia-600 to-pink-500 flex items-center justify-center hover:scale-110 transition-transform shadow-lg">
-                        <i data-lucide="instagram" class="w-6 h-6 text-white"></i>
+                        <i class="fab fa-instagram text-xl text-white"></i>
                     </a>
+                    <!-- تلگرام -->
                     <a href="#" class="w-12 h-12 rounded-full bg-sky-500 flex items-center justify-center hover:scale-110 transition-transform shadow-lg">
-                        <i data-lucide="send" class="w-6 h-6 text-white"></i>
+                        <i class="fab fa-telegram text-xl text-white"></i>
                     </a>
+                    <!-- واتساپ -->
                     <a href="#" class="w-12 h-12 rounded-full bg-green-500 flex items-center justify-center hover:scale-110 transition-transform shadow-lg">
-                        <i data-lucide="message-circle" class="w-6 h-6 text-white"></i>
+                        <i class="fab fa-whatsapp text-xl text-white"></i>
                     </a>
+                    <!-- یوتیوب -->
                     <a href="#" class="w-12 h-12 rounded-full bg-red-600 flex items-center justify-center hover:scale-110 transition-transform shadow-lg">
-                        <i data-lucide="youtube" class="w-6 h-6 text-white"></i>
+                        <i class="fab fa-youtube text-xl text-white"></i>
                     </a>
-                    <a href="#" class="w-12 h-12 rounded-full bg-neutral-700 flex items-center justify-center hover:scale-110 transition-transform shadow-lg">
-                        <i data-lucide="globe" class="w-6 h-6 text-white"></i>
+                    <!-- توییتر -->
+                    <a href="#" class="w-12 h-12 rounded-full bg-neutral-800 flex items-center justify-center hover:scale-110 transition-transform shadow-lg">
+                        <i class="fab fa-x-twitter text-xl text-white"></i>
+                    </a>
+                    <!-- بله -->
+                    <a href="#" class="w-12 h-12 rounded-full bg-blue-900 flex items-center justify-center hover:scale-110 transition-transform shadow-lg" title="بله">
+                        <span class="text-xl text-white font-bold">ب</span>
+                    </a>
+                    <!-- ایتا -->
+                    <a href="#" class="w-12 h-12 rounded-full bg-indigo-700 flex items-center justify-center hover:scale-110 transition-transform shadow-lg" title="ائیتا">
+                        <span class="text-xl text-white font-bold">ا</span>
+                    </a>
+                    <!-- روبیکا -->
+                    <a href="#" class="w-12 h-12 rounded-full bg-orange-600 flex items-center justify-center hover:scale-110 transition-transform shadow-lg" title="روبیکا">
+                        <span class="text-xl text-white font-bold">ر</span>
+                    </a>
+                    <!-- گپ -->
+                    <a href="#" class="w-12 h-12 rounded-full bg-emerald-700 flex items-center justify-center hover:scale-110 transition-transform shadow-lg" title="گپ">
+                        <span class="text-xl text-white font-bold">گ</span>
                     </a>
                 </div>
             </div>
